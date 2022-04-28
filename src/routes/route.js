@@ -1,5 +1,8 @@
 const express = require('express');
+const Author = require('../controllers/authorController');
+const Blog = require('../controllers/blogController');
 const router = express.Router();
+
 
 
 router.get("/test-me", function (req, res) {
@@ -16,6 +19,8 @@ router.get("/getBlog",BlogController.getBlog)
 router.put("/Updateblogs/:blogId",BlogController.UpdateBlog)
 router.delete("/blogs/:blogId",BlogController.DeleteBlogID)
 router.delete("/DeleteBlogs",BlogController.DeleteBlog)
+
+
 
 
 
