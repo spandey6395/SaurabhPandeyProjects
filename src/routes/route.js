@@ -9,18 +9,18 @@ const authorLogin = require('../controller/loginController.js');
 //Author 
 router.post("/authors",authorController.createAuthor)
 
-router.post('/login', authorLogin.userlogin) //login
+router.post('/login', authorLogin.userlogin) //login Phase 2
 
 //Blog
-router.post("/blogs",blogController.createBlogs)
 
-router.get("/getBlogs",blogController.getBlogs)
+router.post("/blogs",middleware.authentication,blogController.createBlogs)
 
-router.get("/getFilterBlogs",blogController.getFilterBlogs)
+router.get("/getBlogs",middleware.authentication,blogController.getBlogs)
 
-router.put("/blogs/:blogId",blogController.updateBlog)
+router.put("/blogs/:blogId",middleware.authentication,middleware.authorization, blogController.updateBlog)
 
-router.delete("/blogs/:blogId",blogController.deleteBlog)
+router.delete("/blogs/:blogId",middleware.authentication,middleware.authorization,blogController.deleteBlog)
 
-router.delete("/deleteQuery",blogController.deleteParams)
+router.delete("/deleteQuery",middleware.authentication,middleware.authorization,blogController.deleteParams)
+
 module.exports = router;
