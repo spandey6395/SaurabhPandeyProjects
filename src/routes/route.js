@@ -10,6 +10,7 @@ router.get("/test-me", function (req, res) {
 
 const AuthorController = require("../Controller/AuthorController")
 router.post("/CreateAuthor", AuthorController.CreateAuthor)
+router.post("/AuthorLogin",AuthorController.Authorlogin)
 
 
 const BlogController = require("../Controller/BlogController")

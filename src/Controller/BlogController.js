@@ -80,7 +80,7 @@ const getBlog = async function (req, res) {
 
         let data = req.query
         if (data) {
-            let blogs = await BlogModel.find({ isDeleted: false, isPublished: true, $or: [{ author_id: data.author_id }, { category: data.category }, { tags: data.tags }, { subcategory: data.subcategory }] })
+            let blogs = await BlogModel.find({ isDeleted: false, isPublished: true, $or: [{ author_id: data.author_id }, { category: data.category }, { tags: data.tags }, { subcategory: data.subcategory }] }).populate('author_id')
             if (!blogs) res.status(404).send({ status: false, msg: "not found" })
             res.status(200).send({ status: true, data: blogs })
         }
