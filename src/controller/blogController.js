@@ -2,6 +2,8 @@ const BlogModel = require('../module/blogModel')
 const AuthorModel = require("../module/authorModel")
 const mongoose = require('mongoose')
 
+//............................................2nd API (POST/blogs)...........................................................
+
 const createBlogs = async function (req, res) {
     try {
         const data = req.body
@@ -38,18 +40,8 @@ const createBlogs = async function (req, res) {
 
 }
 
-// const getBlogs = async (req, res) => {
-//     try {
-//         const blog = await BlogModel.find({ isDeleted: false, isPublished: true })
-//         if (Object.keys(blog) != 0)
-//             return res.status(200).send({ msg: blog })
+//............................................3rd API (GET/blogs)...........................................................
 
-//         return res.status(400).send({ msg: "nothing found" })
-//     }
-//     catch (err) {
-//         res.status(500).send({ error: err.message })
-//     }
-// }
 const getFilterBlogs = async (req, res) => {
     try {
 
@@ -81,6 +73,9 @@ const getFilterBlogs = async (req, res) => {
         res.status(500).send({ error: err.message })
     }
 }
+
+//............................................3rd API (GET/blogs)...........................................................
+
 
 const getBlogs = async function (req, res) {
     try {
@@ -117,6 +112,9 @@ const getBlogs = async function (req, res) {
       res.status(500).send({ status: true, msg: err.message });
     }
   };
+
+//............................................4th API (PUT/blogs/:blogID)....................................................
+
 
 const updateBlog = async (req, res) => {
     try {
@@ -163,6 +161,9 @@ const updateBlog = async (req, res) => {
     }
 }
 
+//............................................5th API (DELETE/blogs/:blogID)....................................................
+
+
 const deleteBlog = async (req, res) => {
     try {
         const id = req.params.blogId
@@ -189,6 +190,8 @@ const deleteBlog = async (req, res) => {
 
 
 }
+
+//............................................6th API (DELETE/blogs?:queryParams)....................................................
 
 const deleteParams = async (req,res)=>{
     try
@@ -253,3 +256,4 @@ const deleteParams = async (req,res)=>{
 
 
 module.exports = { createBlogs, getBlogs, getFilterBlogs, updateBlog, deleteBlog ,deleteParams} 
+
