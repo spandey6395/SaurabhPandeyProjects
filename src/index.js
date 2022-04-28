@@ -13,7 +13,7 @@ mongoose.connect("mongodb+srv://Yogesh_Mjs:U9bUHeuLxXaOhj4j@cluster0.8e1bd.mongo
     useNewUrlParser: true
 
 })
-.then(() => { console.log('Connected to MongoDB') })
+.then(() => { console.log('MongoDB is Connected ') })
 .catch(err => { console.log('Error connecting to MongoDB: ' + err) });
 
 app.use('/', route);
