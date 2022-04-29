@@ -33,12 +33,12 @@ const authorise = async function (req, res, next) {
         let token = req.headers["x-api-key"];
         let blogId = req.params.blogId;
         let blogDetails = await BlogModel.findById(blogId)
-        let authorId = blogDetails.author_id
+       // let authorId = blogDetails.author_id
         let decodedToken = jwt.verify(token, "functionup-uranium");
         if (!decodedToken)
             return res.status(400).send({ status: false, msg: "token is invalid" });
         let decoded = decodedToken.AuthorId
-        if (authorId != decoded) res.status(400).send({ status: false, msg: "anthentication denied" })
+        if (blogDetails.author_id != decoded) res.status(400).send({ status: false, msg: "anthentication denied" })
         next()
     }
     catch (err) {
