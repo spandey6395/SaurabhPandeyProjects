@@ -4,8 +4,6 @@ const jwt = require('jsonwebtoken')
 
 /////////////////////////////////////////////////Create/CreateAuthor
 
-
-
 const CreateAuthor = async function (req, res) {
     try {
 
@@ -40,8 +38,13 @@ const CreateAuthor = async function (req, res) {
 }
 
 
-/////////////////////////////////////////////////AuthorLogin 
 
+
+
+
+
+
+/////////////////////////////////////////////////AuthorLogin 
 
 const Authorlogin = async function (req, res) {
 
@@ -54,31 +57,37 @@ const Authorlogin = async function (req, res) {
             let password = req.body.password;
 
 
-            // if (userName == null && password == null) return res.status(400).send({ Msg: "userName and Passowrd required" })
-
             if (!userName) return res.status(400).send({ status: false, msg: "userName is required " })
+
+            if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userName))) {
+                res.status(400).send({ status: false, message: `Email should be a valid email address` })
+                return
+            }
 
             if (!password) return res.status(400).send({ status: false, msg: "Password is required " })
 
-            let Author = await AuthorModel.findOne({ email: userName, password: password });
 
-            if (!Author)
-                return res.status(401).send({
-                    status: false,
-                    msg: "username or the password is not corerct",
-                });
+            if (userName && password) {
+                let Author = await AuthorModel.findOne({ email: userName, password: password });
+
+                if (!Author)
+                    return res.status(401).send({
+                        status: false,
+                        msg: "username or the password is not corerct",
+                    });
 
 
-            let token = jwt.sign(
-                {
-                    AuthorId: Author._id.toString(),
-                    Project: "BloggingSite",
-                    organisation: "FunctionUp",
-                },
-                "functionup-uranium"
-            );
+                let token = jwt.sign(
+                    {
+                        AuthorId: Author._id.toString(),
+                        Project: "BloggingSite",
+                        organisation: "FunctionUp",
+                    },
+                    "functionup-uranium"
+                );
 
-            res.status(201).send({ status: true, emailID: userName, password, Data: token });
+                res.status(201).send({ status: true, emailID: userName, password, Data: token });
+            }
         } else { return res.status(404).send({ status: false, Msg: "Body is empty / Not Found" }) }
     }
 
