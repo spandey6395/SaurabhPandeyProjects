@@ -4,7 +4,7 @@ const router = express.Router();
 const authorController = require("../controller/authorController");
 const blogController = require("../controller/blogController");
 const middleware = require('../middleware/middleware.js');
-const authorLogin = require('../controller/loginController.js');
+
 
 //Author 
 router.post("/authors",authorController.createAuthor)
