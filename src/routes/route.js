@@ -9,7 +9,7 @@ const middleware = require('../middleware/middleware.js');
 //Author 
 router.post("/authors",authorController.createAuthor)
 
-router.post('/login', authorLogin.userlogin) //login Phase 2
+router.post('/login', authorController.login) //login Phase 2
 
 //Blog
 
