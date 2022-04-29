@@ -18,20 +18,20 @@ const userlogin= async function(req,res){
         if(!(password)){
             return res.status(400).send({status:false,msg:"Please Fill Password Feild "})}
 
-        if(!validateEmail(email)){
-            return res.status(400).send({status:false,msg:"Incorrect Email Format "})//email validation
-            }
+        // if(!validateEmail(email)){
+        //     return res.status(400).send({status:false,msg:"Incorrect Email Format "})//email validation
+        //     }
 
-        if(!validatePassword(password)){
-            return res.status(400).send({status:false,msg:"Incorrect Password Format"})//password validation
-            }//password validation
+        // if(!validatePassword(password)){
+        //     return res.status(400).send({status:false,msg:"Incorrect Password Format"})//password validation
+        //     }//password validation
 
         const value=await AuthorModel.findOne({
             email:email,
             password:password,
     });
         if(!value)
-        return res.status(400).send( {msg : "Email and Password not Matched"});
+        return res.status(401).send( {msg : "Email and Password not Matched"});
         let token=jwt.sign(
             {author_Id:value._id.toString()},
             "My Secret Key"

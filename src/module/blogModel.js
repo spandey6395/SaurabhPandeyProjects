@@ -7,7 +7,6 @@ const objectId = mongoose.Schema.Types.ObjectId
      "title" : {
          type : String,
          required : [true,'Title is required'],
-         unique:true,
          trim : true
      },
      "body" : {
