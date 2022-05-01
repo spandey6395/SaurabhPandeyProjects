@@ -187,7 +187,7 @@ const DeleteBlogbypathparam = async function (req, res) {
 
 const DeleteBlogbyqueryparam = async function (req, res) {
 
-   // try {
+    try {
 
         let { ...data } = req.query;
         console.log(data)
@@ -200,8 +200,8 @@ const DeleteBlogbyqueryparam = async function (req, res) {
         if (deletedBlog.modifiedCount == 0) return res.status(400).send({ status: false, msg: "No such blog exist or might have already been deleted" })
 
         res.status(200).send({ status: true, msg: "The blog has been deleted successfully" });
-   // } catch (err) {
-       // res.status(500).send({ status: false, error: err.message });
+    } catch (err) {
+        res.status(500).send({ status: false, error: err.message });
     
 }
 
