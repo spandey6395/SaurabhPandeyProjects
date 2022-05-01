@@ -1,5 +1,4 @@
 const express = require('express');
-
 const router = express.Router();
 
 
@@ -18,8 +17,8 @@ const MiddleWare = require("../MiddleWare/auth")
 router.post("/CreateBlog", MiddleWare.authenticate, BlogController.CreateBlog)
 router.get("/getBlog", MiddleWare.authenticate, BlogController.getBlog)
 router.put("/Updateblogs/:blogId", MiddleWare.authenticate, MiddleWare.authorise, BlogController.UpdateBlog)
-router.delete("/blogs/:blogId", MiddleWare.authenticate, MiddleWare.authorise, BlogController.DeleteBlogID)
-router.delete("/DeleteBlogs", MiddleWare.authenticate, MiddleWare.verifyAuthorId, BlogController.DeleteBlog)
+router.delete("/blogs/:blogId", MiddleWare.authenticate, MiddleWare.authorise, BlogController.DeleteBlogbyqueryparam)
+router.delete("/DeleteBlogs", MiddleWare.authenticate, MiddleWare.verifyAuthorId, BlogController.DeleteBlogbypathparam)
 
 
 
