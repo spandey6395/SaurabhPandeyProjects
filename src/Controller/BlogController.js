@@ -79,6 +79,7 @@ const getBlog = async function (req, res) {
     try {
 
         let data = req.query
+        console.log(data)
         if (data) {
             let blogs = await BlogModel.find({ isDeleted: false, isPublished: true, $or: [{ author_id: data.author_id }, { category: data.category }, { tags: data.tags }, { subcategory: data.subcategory }] }).populate('author_id')
             if (!blogs) res.status(404).send({ status: false, msg: "not found" })
@@ -138,6 +139,8 @@ const UpdateBlog = async function (req, res) {
 //---------------DELETE /blogs/:blogId/Path Param
 
 
+
+
 const DeleteBlogID = async function (req, res) {
 
     try {
@@ -150,7 +153,6 @@ const DeleteBlogID = async function (req, res) {
 
 
         let BlogDoc = await BlogModel.findOne({ _id: BlogId, isDeleted: false })
-        //console.log(BlogDoc)
         if (!BlogDoc) {
             return res.status(404).send({ status: false, msg: "Blog does not exist" })
         }
@@ -163,48 +165,36 @@ const DeleteBlogID = async function (req, res) {
     }
 }
 
+
+
+
+
+
+
+
+//////////////////////DeleteBlog/QueryParam
+
+
+
 const DeleteBlog = async function (req, res) {
 
 
-    let keyArr = Object.keys(req.query)
-    let somethingBad = false;
-    for (let i = 0; i < keyArr.length; i++) {
-        if (!(keyArr[i] == "author_id" || keyArr[i] == "category" || keyArr[i] == "tags" || keyArr[i] == "subcategory" || keyArr[i] == "isPublished"))
-            somethingBad = true;
+    try {
+        let { ...data } = req.query;
+        if (Object.keys(data).length == 0) return res.send({ status: false, msg: "Error!, Details are needed to delete a blog" });
+
+
+        let deletedBlog = await BlogModel.updateMany(
+            { $and: [{ $and: [{ isDeleted: false }, { isPublished: true }] }, { $or: [{ author_id: data.author_id }, { category: { $in: [data.category] } }, { tags: { $in: [data.tags] } }, { subcategory: { $in: [data.subcategory] } }] }] },
+            { $set: { isDeleted: true, deletedAt: new Date(), isPublished: false } },
+            { new: true },
+        )
+        if (deletedBlog.modifiedCount == 0) return res.status(400).send({ status: false, msg: "No such blog exist or might have already been deleted" })
+
+        res.status(200).send({ status: true, msg: "The blog has been deleted successfully" });
+    } catch (err) {
+        res.status(500).send({ status: false, error: err.message });
     }
-    if (somethingBad) {
-        return res.status(400).send({ status: false, msg: "invalid input" })
-    }
-    req.query.isDeleted = false;
-    let date = new Date()
-    const data = await BlogModel.updateMany(req.query, { $set: { isDeleted: true, deletedAt: date } })
-    if (data.matchedCount == 0)
-        return res.status(404).send({ status: false, msg: "blog not found" })
-    res.status(200).send({ status: true, data: "finally deleted Successfull " + data.matchedCount + " documents" })
-
-    // try {
-    //     let { ...data } = req.query;
-    //     if (Object.keys(data).length == 0) return res.send({ status: false, msg: "Error!, Details are needed to delete a blog" });
-
-    //     let timeStamps = new Date();
-    //     let deletedBlog = await BlogModel.updateMany(
-    //         { $and: [{ $and: [{ isDeleted: false }, { isPublished: true }] }, { $or: [{ author_id: data.author_id }, { category: { $in: [data.category] } }, { tags: { $in: [data.tags] } }, { subcategory: { $in: [data.subcategory] } }] }] },
-    //         { $set: { isDeleted: true, deletedAt: timeStamps, isPublished: false } },
-    //         { new: true },
-    //     )
-    //     if (deletedBlog.modifiedCount == 0) return res.status(400).send({ status: false, msg: "No such blog exist or might have already been deleted" })
-
-    //     res.status(200).send({ status: true, msg: "The blog has been deleted successfully" });
-    // } catch (err) {
-    //     res.status(500).send({ status: false, error: err.message });
-    // }
-
-
-
-
-
-
-
 }
 
 

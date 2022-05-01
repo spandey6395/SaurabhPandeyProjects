@@ -10,7 +10,7 @@ const CreateAuthor = async function (req, res) {
         let data = req.body;
 
         if (Object.keys(data).length != 0) {
-
+            
             let { fname, lname, email, title, password } = data
 
             if (!fname) return res.status(400).send({ status: false, msg: "Fname is required" })
