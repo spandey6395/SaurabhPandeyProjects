@@ -111,14 +111,14 @@ const UpdateBlog = async function (req, res) {
             return res.status(400).send({ status: false, msg: "invalid input" })
         }
 
-        let id = req.params.blogId;
+         let id = req.params.blogId;
 
-        if (!mongoose.isValidObjectId(id))
-            return res.status(400).send({ status: false, msg: "Invalid BlogId." })
+        // if (!mongoose.isValidObjectId(id))
+        //     return res.status(400).send({ status: false, msg: "Invalid BlogId." })
 
-        let findBlog = await BlogModel.findOne({ _id: id, isDeleted: false })
-        if (!findBlog)
-            return res.status(404).send({ status: false, msg: "No such documents found" })
+        // let findBlog = await BlogModel.findOne({ _id: id, isDeleted: false })
+        // if (!findBlog)
+        //     return res.status(404).send({ status: false, msg: "No such documents found" })
 
 
         let blog = req.body
@@ -158,8 +158,8 @@ const DeleteBlogbypathparam = async function (req, res) {
         let BlogId = await BlogModel.findById({ _id: id });
 
 
-        if (!mongoose.isValidObjectId(id))
-            return res.status(404).send({ status: false, msg: 'Invalid objectId.' })
+        // if (!mongoose.isValidObjectId(id))
+        //     return res.status(404).send({ status: false, msg: 'Invalid objectId.' })
 
         let BlogDoc = await BlogModel.findOne({ _id: BlogId, isDeleted: false })
         if (!BlogDoc) {
@@ -203,6 +203,7 @@ const DeleteBlogbyqueryparam = async function (req, res) {
     } catch (err) {
         res.status(500).send({ status: false, error: err.message });
     
+}
 }
 
 
