@@ -3,7 +3,6 @@ const { flat } = require('mongoose/lib/helpers/query/validOps')
 const { object } = require('mongoose/lib/utils')
 const AuthorModel = require('../models/AuthorModel')
 const BlogModel = require('../models/BlogModel')
-const mongoose = require("mongoose")
 
 
 
