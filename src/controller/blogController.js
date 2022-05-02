@@ -3,12 +3,16 @@ const AuthorModel = require("../module/authorModel")
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 
+
+//.............................................PHASE (1) Create Blogs........................................................
+
+
 const createBlogs = async function (req, res) {   //create the Blog
     try {
 
         //TITLE FORMAT CHECK BY REJEX
-        const validatefield = (title,category) => {
-            return String(title,category)
+        const validatefield = (Feild) => {
+            return String(Feild)
                 .match(
                     /^[a-zA-Z]/
                 );
@@ -17,22 +21,30 @@ const createBlogs = async function (req, res) {   //create the Blog
         const data = req.body
         let token = req.headers["x-api-key"] || req.headers["x-Api-Key"];
         if (Object.keys(data).length == 0) {
-            return res.send({status:false, msg: "Blog details not given" })//details is given or not
+            return res.status(400).send({status:false, msg: "Blog details not given" })//details is given or not
         }
         if (!data.title) {
-            return res.status(400).send({status:false, msg: "Title not given" })
+            return res.status(400).send({status:false,msg: "Title not given" })
         }
         if (!validatefield(data.title)) {
-            return res.status(400).send({ status: false, msg: "Invaild title" })//title validation By Rejex
+            return res.status(400).send({ status: false, msg: "Invaild title Format" })//title validation By Rejex
         }
 
 
         if (!data.body)
             return res.status(400).send({status:false, msg: "Body not given" })
+
+        if (!validatefield(data.body)) {
+            return res.status(400).send({ status: false, msg: "Invaild Body Format" })//BODY validation By Rejex
+            }
         if (!data.authorId)
-            return res.status(400).send({ status:false,msg: "authorId not given" })
+            return res.status(400).send({status:false, msg: "authorId not given" })
         if (!data.category)
             return res.status(400).send({status:false, msg: "category not given" })
+
+        if (!validatefield(data.category)) {
+            return res.status(400).send({ status: false, msg: "Invaild Category Format" })//BODY validation By Rejex
+            }
 
         if (!validatefield(data.category)) {
                 return res.status(400).send({ status: false, msg: "Invaild Category" })//title validation By Rejex
@@ -45,26 +57,28 @@ const createBlogs = async function (req, res) {   //create the Blog
 
         const id = await AuthorModel.findById(data.authorId)
         if (!id)
-            return res.status(404).send({ msg: "authorId not found" })
+            return res.status(404).send({status: false,msg: "authorId not found" })
 
         const reEntry = await BlogModel.findOne({ title: data.title, authorId: data.authorId })
         if (reEntry) {
-            return res.status(400).send({status:false, msg: `you have a blog of title ${data.title}` })
+            return res.status(400).send({ status:false,msg: `you have a blog of title ${data.title}` })
         }
         let decodedtoken = jwt.verify(token, "group11");
         if (decodedtoken.authorId!=req.body.authorId)  {
             return res.status(401).send({ status: false, msg: "You are Not Authorized To create This Blog With This Author Id" });
           }
         const blog = await BlogModel.create(data)
-        return res.status(201).send({ msg: blog })
+        return res.status(201).send({ status:true,msg: blog })
     }
     catch (err) {
-        res.status(500).send({ error: err.message })
+        res.status(500).send({status:false, error: err.message })
     }
 
 }
 
-//............................................................................................
+//.............................................PHASE (1) GET BLOGS........................................................
+
+
 const getBlogs = async function (req, res) {  //get blog using filter query params
     try {
         const authorId = req.query.authorId;
@@ -93,7 +107,7 @@ const getBlogs = async function (req, res) {  //get blog using filter query para
 
             const id = await AuthorModel.findById(obj.authorId)//check id exist in author model
             if (!id)
-                return res.status(404).send({status:false, msg: "authorId dont exist" })
+                return res.status(404).send({ status:false,msg: "authorId dont exist" })
         }
 
         const data = await BlogModel.find(obj);
@@ -106,16 +120,23 @@ const getBlogs = async function (req, res) {  //get blog using filter query para
     }
 };
 
+
+//.............................................PHASE (1) Update Blogs........................................................
+
+
 const updateBlog = async (req, res) => { //update blog
     try {
         const blogId = req.params.blogId
 
         const blog = await BlogModel.findOne({ _id: blogId, isDeleted: false }) //blog will contain only 1 doc
         //beacuse blog id is unique
+        if(!blog){
+            return res.status(404).send({status:false,msg:"Blog dont exist"})
+        }
 
 
-        if (blog.isPublished == true) {
-            return res.status(404).send({status:false, msg: "blog already published" })
+        if (blog.isPublished== true) {
+            return res.status(404).send({ status:false,msg: "blog already published" })
         }
 
         if (req.body.title) {
@@ -139,13 +160,16 @@ const updateBlog = async (req, res) => { //update blog
         blog.isPublished = true
         blog.save()
         console.log(blog)
-        res.status(200).send({ msg: blog })
+        res.status(200).send({status:true, msg: blog })
 
     }
     catch (err) {
         res.status(500).send({status:false, error: err.message })
     }
 }
+
+//.............................................PHASE (1) Delete blogs........................................................
+
 
 const deleteBlog = async (req, res) => {
     try {
@@ -163,11 +187,16 @@ const deleteBlog = async (req, res) => {
     }
 
     catch (err) {
-        res.status(500).send({ error: err.message })
+        res.status(500).send({status:false, error: err.message })
     }
 
 
 }
+
+
+//.............................................PHASE (1) Delete Blogs By params........................................................
+
+
 
 const deleteParams = async (req, res) => {
     try {
@@ -182,7 +211,7 @@ const deleteParams = async (req, res) => {
 
         if (req.query.authorId) {
             if (req.query.authorId != decodedtoken.authorId) {
-                return res.send({ msg: "unauthorized access" })
+                return res.status(403).send({ status:false,msg: "unauthorized access" })
             }
             obj.authorId = req.query.authorId
         }
@@ -210,11 +239,69 @@ const deleteParams = async (req, res) => {
 
     }
     catch (err) {
-        res.status(500).send({ error: err.message })
+        res.status(500).send({status:false, error: err.message })
     }
 }
 
 module.exports = { createBlogs, getBlogs, updateBlog, deleteBlog, deleteParams }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // const deleteBlogs = async (req, res) => {
 
