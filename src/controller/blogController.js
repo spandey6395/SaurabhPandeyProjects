@@ -49,7 +49,14 @@ const createBlogs = async function (req, res) {   //create the Blog
         if (!validatefield(data.category)) {
                 return res.status(400).send({ status: false, msg: "Invaild Category" })//title validation By Rejex
             }
-
+        if(data.tags){
+            const t = data.tags.filter((e)=>e.length!=0)
+            data.tags=t
+        }
+        if(data.subcategory){
+            const t = data.subcategory.filter((e)=>e.length!=0)
+            data.subcategory=t
+        }
         if(data.isPublished==true){
             data.publishedAt=new Date()
         }
