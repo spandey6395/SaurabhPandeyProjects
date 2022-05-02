@@ -12,6 +12,7 @@ const CreateBlog = async function (req, res) {
 
 
         let blog = req.body
+        
         if (Object.keys(blog).length != 0) {
 
             if (req.body.author_id == null) {
