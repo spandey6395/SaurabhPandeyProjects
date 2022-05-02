@@ -11,7 +11,7 @@ const authentication = async function (req, res, next) {
     let token = req.headers["x-api-key"] || req.headers["x-Api-Key"];
 
     if (!token){
-        return res.status(404).send({ status: false, msg: "Token must be Present" });
+        return res.status(401).send({ status: false, msg: "Token must be Present" });
     }
 
     let decodedtoken = jwt.verify(token, "group11"); // to verify that signature is valid or not
