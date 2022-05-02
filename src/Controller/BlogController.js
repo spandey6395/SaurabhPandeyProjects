@@ -55,7 +55,7 @@ const CreateBlog = async function (req, res) {
             }
 
             let BlogCreated = await BlogModel.create(blog)
-            res.status(201).send({ data: BlogCreated })
+            res.status(201).send({status:true,msg:"Blog created successfully" ,data: BlogCreated })
         }
         else {
             res.status(400).send({ message: "BAD invalid request" });
@@ -114,14 +114,6 @@ const UpdateBlog = async function (req, res) {
 
          let id = req.params.blogId;
 
-        // if (!mongoose.isValidObjectId(id))
-        //     return res.status(400).send({ status: false, msg: "Invalid BlogId." })
-
-        // let findBlog = await BlogModel.findOne({ _id: id, isDeleted: false })
-        // if (!findBlog)
-        //     return res.status(404).send({ status: false, msg: "No such documents found" })
-
-
         let blog = req.body
 
         if (Object.keys(blog).length == 0) {
@@ -159,8 +151,6 @@ const DeleteBlogbypathparam = async function (req, res) {
         let BlogId = await BlogModel.findById({ _id: id });
 
 
-        // if (!mongoose.isValidObjectId(id))
-        //     return res.status(404).send({ status: false, msg: 'Invalid objectId.' })
 
         let BlogDoc = await BlogModel.findOne({ _id: BlogId, isDeleted: false })
         if (!BlogDoc) {
