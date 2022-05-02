@@ -17,10 +17,10 @@ const createBlogs = async function (req, res) {   //create the Blog
         const data = req.body
         let token = req.headers["x-api-key"] || req.headers["x-Api-Key"];
         if (Object.keys(data).length == 0) {
-            return res.send({ msg: "Blog details not given" })//details is given or not
+            return res.send({status:false, msg: "Blog details not given" })//details is given or not
         }
         if (!data.title) {
-            return res.status(400).send({ msg: "Title not given" })
+            return res.status(400).send({status:false, msg: "Title not given" })
         }
         if (!validatefield(data.title)) {
             return res.status(400).send({ status: false, msg: "Invaild title" })//title validation By Rejex
@@ -28,11 +28,11 @@ const createBlogs = async function (req, res) {   //create the Blog
 
 
         if (!data.body)
-            return res.status(400).send({ msg: "Body not given" })
+            return res.status(400).send({status:false, msg: "Body not given" })
         if (!data.authorId)
-            return res.status(400).send({ msg: "authorId not given" })
+            return res.status(400).send({ status:false,msg: "authorId not given" })
         if (!data.category)
-            return res.status(400).send({ msg: "category not given" })
+            return res.status(400).send({status:false, msg: "category not given" })
 
         if (!validatefield(data.category)) {
                 return res.status(400).send({ status: false, msg: "Invaild Category" })//title validation By Rejex
@@ -49,7 +49,7 @@ const createBlogs = async function (req, res) {   //create the Blog
 
         const reEntry = await BlogModel.findOne({ title: data.title, authorId: data.authorId })
         if (reEntry) {
-            return res.status(400).send({ msg: `you have a blog of title ${data.title}` })
+            return res.status(400).send({status:false, msg: `you have a blog of title ${data.title}` })
         }
         let decodedtoken = jwt.verify(token, "group11");
         if (decodedtoken.authorId!=req.body.authorId)  {
@@ -93,7 +93,7 @@ const getBlogs = async function (req, res) {  //get blog using filter query para
 
             const id = await AuthorModel.findById(obj.authorId)//check id exist in author model
             if (!id)
-                return res.status(404).send({ msg: "authorId dont exist" })
+                return res.status(404).send({status:false, msg: "authorId dont exist" })
         }
 
         const data = await BlogModel.find(obj);
@@ -102,7 +102,7 @@ const getBlogs = async function (req, res) {  //get blog using filter query para
         }
         res.status(200).send({ status: true, data: data });
     } catch (err) {
-        res.status(500).send({ status: true, msg: err.message });
+        res.status(500).send({ status: false, msg: err.message });
     }
 };
 
@@ -115,7 +115,7 @@ const updateBlog = async (req, res) => { //update blog
 
 
         if (blog.isPublished == true) {
-            return res.status(404).send({ msg: "blog already published" })
+            return res.status(404).send({status:false, msg: "blog already published" })
         }
 
         if (req.body.title) {
@@ -143,7 +143,7 @@ const updateBlog = async (req, res) => { //update blog
 
     }
     catch (err) {
-        res.status(500).send({ error: err.message })
+        res.status(500).send({status:false, error: err.message })
     }
 }
 
@@ -159,7 +159,7 @@ const deleteBlog = async (req, res) => {
             return res.status(200).send({ status:true,msg:"Blog deleted Succesfully",data: blog })
         }
 
-        return res.status(404).send({ msg: "Don't Exist" })
+        return res.status(404).send({status:false, msg: "Don't Exist" })
     }
 
     catch (err) {

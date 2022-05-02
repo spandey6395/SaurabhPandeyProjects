@@ -33,7 +33,7 @@ const createAuthor = async (req, res) => {
     const data = req.body;
 
     if (Object.keys(data).length == 0) {
-      return res.send({ msg: "Feild Can't Empty.Please Enter Some Details" });
+      return res.status(400).send({status:false, msg: "Feild Can't Empty.Please Enter Some Details" });
     }
 
     if (!data.fname){
@@ -46,7 +46,7 @@ const createAuthor = async (req, res) => {
     }
 
     if (!data.lname) {
-        return res.status(400).send("Last name is missing");
+        return res.status(400).send({status:false,msg:"Last name is missing"});
     }
 
     //last Name validation by Rejex
@@ -55,7 +55,7 @@ const createAuthor = async (req, res) => {
     }
 
     if (!data.email){
-        return res.status(400).send("Email is missing");
+        return res.status(400).send({status:false,msg:"Email is missing"});
     }
 
     //email validation by Rejex
@@ -64,7 +64,7 @@ const createAuthor = async (req, res) => {
     }
 
     if (!data.password) {
-        return res.status(400).send("Password is missing");
+        return res.status(400).send({status:false,msg:"Password is missing"});
     }
 
     //password validation by Rejex
