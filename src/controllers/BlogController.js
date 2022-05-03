@@ -78,6 +78,7 @@ const CreateBlog = async function (req, res) {
 //----------------Getblog/GET /blogs
 
 
+
 const getBlog = async function (req, res) {
     try {
 
@@ -93,6 +94,7 @@ const getBlog = async function (req, res) {
         res.status(404).send({ status: false, msg: "NOT FOUND", ERROR: err.message });
     }
 }
+
 
 
 
