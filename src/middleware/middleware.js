@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const BlogModel = require("../module/blogModel");
-const AuthorModel = require("../module/authorModel");
+const BlogModel = require("../model/blogModel");
+const AuthorModel = require("../model/authorModel");
 const mongoose = require("mongoose");
 
 

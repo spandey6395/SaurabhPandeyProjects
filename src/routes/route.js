@@ -1,26 +1,18 @@
 const express = require('express');
 const router = express.Router();
 
-const authorController = require("../controller/authorController");
-const blogController = require("../controller/blogController");
-const middleware = require('../middleware/middleware.js');
+const collegeController = require('../controller/collegeController')
+const internController  = require('../controller/internController')
+//college
+router.post("/functionup/colleges",collegeController.createCollege)
 
 
-//Author 
-router.post("/authors",authorController.createAuthor)
+//Intern
 
-router.post('/login', authorController.login) //login Phase 2
+router.post("/functionup/interns",internController.createIntern)
 
-//Blog
+ router.get("/functionup/collegeDetails",internController.getInterns)
 
-router.post("/blogs",middleware.authentication,blogController.createBlogs)
 
-router.get("/getBlogs",middleware.authentication,blogController.getBlogs)
-
-router.put("/blogs/:blogId",middleware.authentication,middleware.authorization, blogController.updateBlog)
-
-router.delete("/blogs/:blogId",middleware.authentication,middleware.authorization,blogController.deleteBlog)
-
-router.delete("/deleteQuery",middleware.authentication,middleware.authorization,blogController.deleteParams)
 
 module.exports = router;
