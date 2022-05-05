@@ -9,7 +9,8 @@ const createCollege = async (req,res) => {
     //STRING VALIDATION BY REJEX
     const validateName = (name) => {
      return String(name).match(
-         /^[a-zA-Z]/);
+         /^[a-zA-Z][a-zA-Z]/
+         );
     };
 
     //URL VALIDATION BY REGEX
@@ -33,6 +34,11 @@ const createCollege = async (req,res) => {
     if(!validateName(data.name)){
       return res.status(400).send({status:false, message:"College abrivite name is INVALID"})
     }
+        //check for unique name
+        const uniqueName = await CollegeModel.findOne({name:data.name})  //serach for name present in college collection
+        if(uniqueName){
+          return res.status(400).send({status:false,message:`College name:${data.name} is already registered!!!`})
+        }
 
     //college fullname
     if(!data.fullName){
@@ -50,11 +56,7 @@ const createCollege = async (req,res) => {
       return res.status(400).send({status:false,message:"College logoLink is INVALID"})
     }
 
-    //check for unique name
-    const uniqueName = await CollegeModel.findOne({name:data.name})  //serach for name present in college collection
-    if(uniqueName){
-      return res.status(400).send({status:false,message:`College name:${data.name} is already registered!!!`})
-    }
+
 
     const collegedata = await CollegeModel.create(data)
     return res.status(201).send({status:true, data:collegedata } )

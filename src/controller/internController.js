@@ -103,24 +103,30 @@ const getInterns = async (req,res) => {
          return res.status(400).send({status:false, message:"collegeName is missing in query params"})
         }
         
-        const college = await CollegeModel.findOne({name:collegeName,isDeleted:false})
+        const college = await CollegeModel.findOne({name:collegeName,isDeleted:false}).select({_id:1,name:1,fullName:1,logoLink:1})
+        console.log(college)
         if(!college){
-            return res.status(404).send({status:false, message:"college dont exists"})
-
+            return res.status(404).send({status:false, message:`College of name ${collegeName} not found!!!`})
         }
         console.log(college)
+        
         const InternsData = await InternModel.find({collegeId:college._id,isDeleted:false}).select({isDeleted:0,collegeId:0,createdAt:0,updatedAt:0,__v:0})
+        console.log(InternsData)
+        
         if(InternsData.length==0){
-            return res.status(404).send({status:false, message:"no records found of interns!!!"})
+            return res.status(404).send({status:false, message:`no intern found of ${college.name} college !!!`})
 
         }
-        
+        //using another object
         const detail = {}
         detail.name = college.name
         detail.fullName = college.fullName
         detail.logoLink = college.logoLink
-        detail.interests = [InternsData]
+        detail.interests = InternsData
         console.log(detail)
+
+        //can also be done using college._doc.interests=[interdata]
+        //we can deep copy using JSONstringfy method
 
         return res.status(200).send({status:true, data:detail})
 
