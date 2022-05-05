@@ -34,7 +34,7 @@ const createIntern = async (req, res) => {
 
         //check for empty body
         if (Object.keys(data).length == 0) {     //check if no data given in body
-            return res.status(400).send({status:false, message: "Feild Can't Empty.Please Enter Some Intern Details" });
+            return res.status(400).send({status:false, message: "Feild Can't Empty. Please Enter Some Intern Details" });
          }
 
         //intern name
@@ -78,7 +78,7 @@ const createIntern = async (req, res) => {
 
         let isValidcollegeID = mongoose.Types.ObjectId.isValid(data.collegeId);//check if objectId is objectid
         if (!isValidcollegeID) {
-            return res.status(400).send({ status: false, msg: `College ID ${data.collegeId} is INVALID!!` });
+            return res.status(400).send({ status: false, messagecd: `College ID ${data.collegeId} is INVALID!!` });
         }
 
         const id = await CollegeModel.findById(data.collegeId)
@@ -118,17 +118,18 @@ const getInterns = async (req,res) => {
 
         }
         //using another object
-        const detail = {}
-        detail.name = college.name
-        detail.fullName = college.fullName
-        detail.logoLink = college.logoLink
-        detail.interests = InternsData
-        console.log(detail)
+        // const detail = {}
+        // detail.name = college.name
+        // detail.fullName = college.fullName
+        // detail.logoLink = college.logoLink
+        // detail.interests = InternsData
+        // console.log(detail)
 
         //can also be done using college._doc.interests=[interdata]
+        college._doc.interests=InternsData
         //we can deep copy using JSONstringfy method
 
-        return res.status(200).send({status:true, data:detail})
+        return res.status(200).send({status:true, data:college})
 
 
     }
