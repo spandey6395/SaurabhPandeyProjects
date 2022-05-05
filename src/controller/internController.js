@@ -34,7 +34,7 @@ const createIntern = async (req, res) => {
 
         //check for empty body
         if (Object.keys(data).length == 0) {     //check if no data given in body
-            return res.status(400).send({status:false, message: "Feild Can't Empty.Please Enter Some Intern Details" });
+            return res.status(400).send({status:false, message: "Feild Can't Empty. Please Enter Some Intern Details" });
          }
 
         //intern name
@@ -78,7 +78,11 @@ const createIntern = async (req, res) => {
 
         let isValidcollegeID = mongoose.Types.ObjectId.isValid(data.collegeId);//check if objectId is objectid
         if (!isValidcollegeID) {
+<<<<<<< HEAD
             return res.status(400).send({ status: false, message: `College ID ${data.collegeId} is INVALID!!` });
+=======
+            return res.status(400).send({ status: false, messagecd: `College ID ${data.collegeId} is INVALID!!` });
+>>>>>>> c1aba59a9825733ba37f467dd22037a94de92b36
         }
 
         const id = await CollegeModel.findById(data.collegeId)
@@ -103,19 +107,29 @@ const getInterns = async (req,res) => {
          return res.status(400).send({status:false, message:"collegeName is missing in query params"})
         }
         
+<<<<<<< HEAD
         const college = await CollegeModel.findOne({name:collegeName,isDeleted:false})
         
+=======
+        const college = await CollegeModel.findOne({name:collegeName,isDeleted:false}).select({_id:1,name:1,fullName:1,logoLink:1})
+        console.log(college)
+>>>>>>> c1aba59a9825733ba37f467dd22037a94de92b36
         if(!college){
-            return res.status(404).send({status:false, message:"college dont exists"})
-
+            return res.status(404).send({status:false, message:`College of name ${collegeName} not found!!!`})
         }
         console.log(college)
+        
         const InternsData = await InternModel.find({collegeId:college._id,isDeleted:false}).select({isDeleted:0,collegeId:0,createdAt:0,updatedAt:0,__v:0})
         console.log(InternsData)
+<<<<<<< HEAD
+=======
+        
+>>>>>>> c1aba59a9825733ba37f467dd22037a94de92b36
         if(InternsData.length==0){
-            return res.status(404).send({status:false, message:"no records found of interns!!!"})
+            return res.status(404).send({status:false, message:`no intern found of ${college.name} college !!!`})
 
         }
+<<<<<<< HEAD
         
         const detail = {}
         detail.name = college.name
@@ -123,8 +137,21 @@ const getInterns = async (req,res) => {
         detail.logoLink = college.logoLink
         detail.interests = InternsData
         console.log(detail)
+=======
+        //using another object
+        // const detail = {}
+        // detail.name = college.name
+        // detail.fullName = college.fullName
+        // detail.logoLink = college.logoLink
+        // detail.interests = InternsData
+        // console.log(detail)
+>>>>>>> c1aba59a9825733ba37f467dd22037a94de92b36
 
-        return res.status(200).send({status:true, data:detail})
+        //can also be done using college._doc.interests=[interdata]
+        college._doc.interests=InternsData
+        //we can deep copy using JSONstringfy method
+
+        return res.status(200).send({status:true, data:college})
 
 
     }
@@ -136,6 +163,7 @@ const getInterns = async (req,res) => {
 module.exports  = {createIntern , getInterns}
 
 
+<<<<<<< HEAD
 
 
 
@@ -150,3 +178,5 @@ module.exports  = {createIntern , getInterns}
 
 
 
+=======
+>>>>>>> c1aba59a9825733ba37f467dd22037a94de92b36
