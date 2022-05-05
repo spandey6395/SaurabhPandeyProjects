@@ -127,7 +127,11 @@ const getInterns = async (req,res) => {
 
         //can also be done using college._doc.interests=[interdata]
         college._doc.interests=InternsData
+
         //we can deep copy using JSONstringfy method
+
+        // const d = JSON.parse(JSON.stringify(college))
+        // d.interests = InternsData
 
         return res.status(200).send({status:true, data:college})
 
