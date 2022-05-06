@@ -11,7 +11,7 @@ const createIntern = async (req, res) => {
         //NAME VALIDATION BY REJEX
         const validateName = (name) => {
             return String(name).match(
-                /^[a-zA-Z]/);
+                /^[a-zA-Z]+$/);
         };
 
         //EMAIL VALIDATION BY REJEX
@@ -126,15 +126,14 @@ const getInterns = async (req,res) => {
         // console.log(detail)
 
         //can also be done using college._doc.interests=[interdata]
-        // college._doc.interests=InternsData
+        college._doc.interests=InternsData
+
         //we can deep copy using JSONstringfy method
 
-        const collegeDetails = JSON.parse(JSON.stringify(college))
+        // const d = JSON.parse(JSON.stringify(college))
+        // d.interests = InternsData
 
-        collegeDetails.interests = InternsData
-
-
-        return res.status(200).send({status:true, data:collegeDetails})
+        return res.status(200).send({status:true, data:college})
 
 
     }

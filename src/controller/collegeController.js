@@ -8,15 +8,16 @@ const createCollege = async (req,res) => {
   {
     //STRING VALIDATION BY REJEX
     const validateName = (name) => {
-     return String(name).match(
-         /^[a-zA-Z][a-zA-Z]/
+     return String(name).trim().match(
+         /^[a-z]+$/
          );
     };
 
     //URL VALIDATION BY REGEX
     const validateurl = (url) =>{
       return String(url).match(
-        /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/        
+        ///^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/
+        /^http[^\?]*.(jpg|jpeg|png|webp|avif|gif|svg)(\?(.*))?$/gmi
       )
     };
 
@@ -32,7 +33,7 @@ const createCollege = async (req,res) => {
       return res.status(400).send({status:false, message:"College abbrevaite name is missing"})
     }
     if(!validateName(data.name)){
-      return res.status(400).send({status:false, message:"College abbreviate name is INVALID"})
+      return res.status(400).send({status:false, message:"College abbreviate name should only contain lowercase alphabet"})
     }
         //check for unique name
         const uniqueName = await CollegeModel.findOne({name:data.name})  //search for name present in college collection
