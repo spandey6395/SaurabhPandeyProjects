@@ -11,7 +11,7 @@ const createIntern = async (req, res) => {
         //NAME VALIDATION BY REJEX
         const validateName = (name) => {
             return String(name).match(
-                /^[a-zA-Z]/);
+                /^[a-zA-Z]+$/);
         };
 
         //EMAIL VALIDATION BY REJEX

@@ -8,16 +8,16 @@ const createCollege = async (req,res) => {
   {
     //STRING VALIDATION BY REJEX
     const validateName = (name) => {
-     return String(name).match(
-         /^[a-zA-Z][a-zA-Z]/
+     return String(name).trim().match(
+         /^[a-z]+$/
          );
     };
 
     //URL VALIDATION BY REGEX
     const validateurl = (url) =>{
       return String(url).match(
-        /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/
-        ///[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+        ///^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/
+        /^http[^\?]*.(jpg|jpeg|png|webp|avif|gif|svg)(\?(.*))?$/gmi
       )
     };
 
@@ -71,18 +71,3 @@ const createCollege = async (req,res) => {
 }
 
 module.exports = {createCollege}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
