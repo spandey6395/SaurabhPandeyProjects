@@ -16,8 +16,7 @@ const createCollege = async (req,res) => {
     //URL VALIDATION BY REGEX
     const validateurl = (url) =>{
       return String(url).match(
-        /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/
-        ///[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+        /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/        
       )
     };
 
@@ -71,21 +70,3 @@ const createCollege = async (req,res) => {
 }
 
 module.exports = {createCollege}
-
-
-
-
-
-
-
-
-
-
-
-
-
-<<<<<<< HEAD
-=======
-
-
->>>>>>> c1aba59a9825733ba37f467dd22037a94de92b36
