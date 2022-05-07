@@ -10,13 +10,13 @@ const createIntern = async (req, res) => {
     try {
         //NAME VALIDATION BY REJEX
         const validateName = (name) => {
-            return String(name).match(
-                /^[a-zA-Z]+$/);
+            return String(name).trim().match(
+                /^[a-zA-Z][a-zA-Z\s]+$/);
         };
 
         //EMAIL VALIDATION BY REJEX
         const validateEmail = (email) => {
-            return String(email)
+            return String(email).trim()
                 .toLowerCase()
                 .match(
                     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -25,8 +25,9 @@ const createIntern = async (req, res) => {
 
         //MOBILE NUMBER VALIDATION BY REGEX
         const validateNumber = (number) =>{
-            return String(number).match(
-                /^(\+\d{1,3}[- ]?)?\d{10}$/
+            return String(number).trim().match(
+                ///^(\+\d{1,3}[- ]?)?\d{10}$/
+                /^[6-9]\d{9}$/gi
             )
         }
 
@@ -71,23 +72,22 @@ const createIntern = async (req, res) => {
 
           }
 
-        //collegeId
-        if(!data.collegeId){
-            return res.status(400).send({status:false, message:"collegeId is missing"})
+        //collegeName
+        if(!data.collegeName){
+            return res.status(400).send({status:false, message:"collegeName is missing"})
         }
 
-        let isValidcollegeID = mongoose.Types.ObjectId.isValid(data.collegeId);//check if objectId is objectid
-        if (!isValidcollegeID) {
-            return res.status(400).send({ status: false, messagecd: `College ID ${data.collegeId} is INVALID!!` });
-        }
-
-        const id = await CollegeModel.findById(data.collegeId)
-        if(!id){
-            return res.status(404).send({status:false, message:`College ID ${data.collegeId} dont exist!!`})
+ 
+        const name = await CollegeModel.findOne({name:data.collegeName})
+        if(!name){
+            return res.status(404).send({status:false, message:`College name ${data.collegeName} dont exist!!`})
 
         }
+        const id = name._id
 
-        const InterData = await InternModel.create(data)
+
+
+        const InterData = await InternModel.create({name:data.name,email:data.email,mobile:data.mobile,collegeId:id})
         return res.status(201).send({status:true, data:InterData})
     }
     catch(err){

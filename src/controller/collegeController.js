@@ -13,6 +13,12 @@ const createCollege = async (req,res) => {
          );
     };
 
+    const validatefullName = (name) => {
+      return String(name).trim().match(
+        /^[a-zA-Z\s]+\,?[a-zA-Z\s]+$/
+          );
+     };
+
     //URL VALIDATION BY REGEX
     const validateurl = (url) =>{
       return String(url).match(
@@ -45,7 +51,7 @@ const createCollege = async (req,res) => {
     if(!data.fullName){
       return res.status(400).send({status:false, message:"College fullName is missing"})
     }
-    if(!validateName(data.fullName)){
+    if(!validatefullName(data.fullName)){
       return res.status(400).send({status:false, message:"College fullname is INVALID"})
     }
 
